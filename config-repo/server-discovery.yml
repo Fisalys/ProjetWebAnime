@@ -1,5 +1,5 @@
 server:
-  port: 8761 # port d’écoute conseillé par Spring
+  port: 7000 # port d’écoute conseillé par Spring
 eureka:
   client:
     register-with-eureka: false
