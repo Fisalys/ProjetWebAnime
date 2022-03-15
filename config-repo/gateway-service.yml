@@ -1,2 +1,25 @@
 server:
   port: 8083
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    gateway:
+      routes:
+        - id: anime-service-id
+          uri: lb://anime-service
+          predicates:
+            - Path=/animeservice/**
+        - id: episode-service-id
+          uri: lb://episode-service
+          predicates:
+            - Path=/episodeservice/**
+        - id: personnage-service-id
+          uri: lb://personnage-service
+          predicates:
+            - Path=/personnageservice/**
+        - id: utilisateur-service-id
+          uri: lb://utilisateur-service
+          predicates:
+            - Path=/utilisateurservice/**
+
