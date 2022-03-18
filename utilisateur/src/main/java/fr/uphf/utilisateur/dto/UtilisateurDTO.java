@@ -15,5 +15,5 @@ public class UtilisateurDTO implements Serializable{
     private String mail;
     private boolean admin;
     private Map<Integer,String> listeAnime;
-    private Map<Integer,Map<String,String>> listePartage;
+    private Map<Integer,String> listePartage;
 }

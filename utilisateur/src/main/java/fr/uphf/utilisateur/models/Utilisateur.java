@@ -3,9 +3,11 @@ package fr.uphf.utilisateur.models;
 import lombok.*;
 import org.hibernate.annotations.Table;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +23,8 @@ public class Utilisateur {
     private String password;
     private String mail;
     private boolean admin;
-
-    private List<Integer> listeAnime;
-    private List<Integer> listePartage;
+    @ElementCollection
+    private Map<Integer,String> listeAnime;
+    @ElementCollection
+    private Map<Integer,String> listePartage;
 }
