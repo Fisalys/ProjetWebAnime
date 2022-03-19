@@ -14,10 +14,12 @@ import java.util.List;
 @Service
 public class UtilisateurService extends CommonService {
 
-    private static final String UTILISATEUR_NOT_FOUND = "Utilisateur non trouvée avec l'username : %s";
+    private static final String UTILISATEUR_NOT_FOUND = "Utilisateur non trouvé avec l'username : %s";
 
     @Autowired
     private UtilisateurRepository utilisateurRepository;
+
+
 
     public UtilisateurDTO getUtilisateurByUsername(String username) throws ProcessExeption
     {
@@ -84,5 +86,37 @@ public class UtilisateurService extends CommonService {
             dto.add(d);
         }
         return dto;
+    }
+
+    public void deleteUtilisateur(String username)
+    {
+        Utilisateur u = utilisateurRepository.findUtilisateurByUsername(username);
+        utilisateurRepository.delete(u);
+    }
+
+    public UtilisateurDTO modifierUtilisateur(UtilisateurDTO utilisateurDTO)
+    {
+        Utilisateur utilisateur = utilisateurRepository.findUtilisateurByUsername(utilisateurDTO.getUsername());
+        if(utilisateurDTO.getMdp() != null)
+            utilisateur.setPassword(utilisateurDTO.getMdp());
+        if(utilisateurDTO.getMail() != null)
+            utilisateur.setMail(utilisateurDTO.getMail());
+        if(utilisateurDTO.getListeAnime() != null)
+            utilisateur.setListeAnime(utilisateurDTO.getListeAnime());
+        if(utilisateurDTO.getNotification() != null)
+            utilisateur.setNotification(utilisateurDTO.getNotification());
+
+        utilisateurRepository.save(utilisateur);
+        return utilisateurDTO;
+    }
+
+    public UtilisateurDTO modifierUtilisateurListe(UtilisateurDTO utilisateurDTO)
+    {
+        Utilisateur utilisateur = utilisateurRepository.findUtilisateurByUsername(utilisateurDTO.getUsername());
+        if(utilisateur.getListeAnime() != null)
+            utilisateur.setListeAnime(utilisateurDTO.getListeAnime());
+
+        utilisateurRepository.save(utilisateur);
+        return utilisateurDTO;
     }
 }

@@ -5,7 +5,7 @@ server:
 
 spring:
   h2:
-    console.enabled: true # pour afficher la console H2 http://localhost:8080/h2-console/
+    console.enabled: true # pour afficher la console H2 http://localhost:8081/utilisateurservice/h2-console/
   datasource:
     url: jdbc:h2:mem:testdb #url de la base de données
     driverClassName: org.h2.Driver #driver h2
