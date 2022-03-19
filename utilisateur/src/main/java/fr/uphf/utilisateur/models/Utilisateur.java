@@ -2,10 +2,9 @@ package fr.uphf.utilisateur.models;
 
 import lombok.*;
 import org.hibernate.annotations.Table;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +20,8 @@ public class Utilisateur {
     private String password;
     private String mail;
     private boolean admin;
-
+    @ElementCollection
     private List<Integer> listeAnime;
-    private List<Integer> listePartage;
+    @ElementCollection
+    private List<String> notification;
 }

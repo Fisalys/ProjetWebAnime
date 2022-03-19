@@ -6,10 +6,12 @@ import fr.uphf.utilisateur.exeptions.ProcessExeption;
 import fr.uphf.utilisateur.models.Utilisateur;
 import fr.uphf.utilisateur.repositories.UtilisateurRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class UtilisateurService extends CommonService {
 
     private static final String UTILISATEUR_NOT_FOUND = "Utilisateur non trouvée avec l'username : %s";
@@ -27,7 +29,7 @@ public class UtilisateurService extends CommonService {
                 .mail(utilisateur.getMail())
                 .admin(utilisateur.isAdmin())
                 .listeAnime(utilisateur.getListeAnime())
-                .listePartage(utilisateur.getListePartage())
+                .notification(utilisateur.getNotification())
                 .build();
         return dto;
     }
@@ -41,6 +43,9 @@ public class UtilisateurService extends CommonService {
         else{
             if(utilisateurToCreate.getUsername() == null || utilisateurToCreate.getUsername().isBlank())
                 e.getMessages().add("Username est vide");
+            else if(utilisateurRepository.findUtilisateurByUsername(utilisateurToCreate.getUsername()) != null)
+                e.getMessages().add("Username existe déja");
+
         }
 
         if(!e.getMessages().isEmpty())
@@ -50,13 +55,14 @@ public class UtilisateurService extends CommonService {
     //#TODO hasher le password
     public UtilisateurDTO saveUtilisateur(UtilisateurDTO utilisateurToCreate) throws ProcessExeption
     {
+
         Utilisateur u = Utilisateur.builder()
                 .username(utilisateurToCreate.getUsername())
-                //.password()
+                .password(utilisateurToCreate.getMdp())
                 .mail(utilisateurToCreate.getMail())
                 .admin(utilisateurToCreate.isAdmin())
                 .listeAnime(utilisateurToCreate.getListeAnime())
-                .listePartage(utilisateurToCreate.getListePartage())
+                .notification(utilisateurToCreate.getNotification())
                 .build();
 
         utilisateurRepository.save(u);
@@ -73,7 +79,7 @@ public class UtilisateurService extends CommonService {
                     .mail(a.getMail())
                     .admin(a.isAdmin())
                     .listeAnime(a.getListeAnime())
-                    .listePartage(a.getListePartage())
+                    .notification(a.getNotification())
                     .build();
             dto.add(d);
         }

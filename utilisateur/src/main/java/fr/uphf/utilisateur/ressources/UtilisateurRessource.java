@@ -14,13 +14,13 @@ public class UtilisateurRessource extends CommonService {
     @Autowired
     UtilisateurService utilisateurService;
 
-    @GetMapping
+    @PostMapping ("create")
     public UtilisateurDTO createUtilisateur(@RequestBody UtilisateurDTO utilisateurDTO) throws ProcessExeption {
         utilisateurService.validateUtilisateurModel(utilisateurDTO);
         return utilisateurService.saveUtilisateur(utilisateurDTO);
     }
 
-    @GetMapping
+    @GetMapping("users")
     public UtilisateurDTO getUtilisateurByUsername(@RequestParam String username) throws ProcessExeption
     {
         return utilisateurService.getUtilisateurByUsername(username);
