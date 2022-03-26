@@ -40,7 +40,7 @@ public class AuthorizationRessource {
                 .orElse(new ResponseEntity("Username ou mot de passe invalide", HttpStatus.UNAUTHORIZED));
     }
 
-    @GetMapping("is-authorized")
+    //@GetMapping("is-authorized")
     public ResponseEntity isAuthorize(@RequestHeader("Authorization") String jwt) {
         System.out.println("test");
         if(StringUtils.hasText(jwt) && jwt.startsWith("Bearer ")) {
