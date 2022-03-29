@@ -33,8 +33,9 @@ public class EpisodeService extends CommonService {
 
     public EpisodeDTO saveEpisode(EpisodeDTO episodeToCreate) throws ProcessExeption
     {
+        
+
         Episode e = Episode.builder()
-                .idEpisode(episodeToCreate.getIdEpisode())
                 .titre(episodeToCreate.getTitre())
                 .idAnime(episodeToCreate.getIdAnime())
                 .numEp(episodeToCreate.getNumEp())

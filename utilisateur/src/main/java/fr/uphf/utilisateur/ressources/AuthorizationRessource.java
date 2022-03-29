@@ -7,6 +7,7 @@ import fr.uphf.utilisateur.models.Utilisateur;
 import fr.uphf.utilisateur.payload.ConnexionPayloadRequest;
 import fr.uphf.utilisateur.payload.ConnexionPayloadResponse;
 import fr.uphf.utilisateur.repositories.UtilisateurRepository;
+import fr.uphf.utilisateur.services.CommonService;
 import fr.uphf.utilisateur.services.UtilisateurService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,7 +20,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("authorization")
-public class AuthorizationRessource {
+public class AuthorizationRessource extends CommonService {
 
     @Autowired
     private UtilisateurRepository utilisateurRepository;
@@ -36,7 +37,7 @@ public class AuthorizationRessource {
     @PostMapping("login")
     public ResponseEntity<ConnexionPayloadResponse> login(@RequestBody ConnexionPayloadRequest loginPayloadRequest) {
         return utilisateurRepository.findUtilisateurByUsernameAndPassword(loginPayloadRequest.getUsername(), loginPayloadRequest.getPassword())
-                .map(utilisateur -> ResponseEntity.ok(jwtTokenProvider.generateToken(utilisateur.getUsername())))
+                .map(utilisateur -> ResponseEntity.ok(jwtTokenProvider.generateToken(utilisateur.getUsername(), utilisateur.isAdmin())))
                 .orElse(new ResponseEntity("Username ou mot de passe invalide", HttpStatus.UNAUTHORIZED));
     }
 

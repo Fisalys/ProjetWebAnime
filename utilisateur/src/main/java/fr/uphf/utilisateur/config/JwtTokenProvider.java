@@ -22,7 +22,7 @@ public class JwtTokenProvider {
     @Value("${app.jwtExpirationInMs}")
     private int jwtExpirationInMs;
 
-    public String generateToken(String idUser) {
+    public String generateToken(String idUser, boolean admin) {
 
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
@@ -32,6 +32,7 @@ public class JwtTokenProvider {
 
         return Jwts.builder()
                 .setSubject(idUser)
+                .claim("admin", admin)
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .signWith(key)
@@ -42,6 +43,7 @@ public class JwtTokenProvider {
         Claims claims = Jwts.parserBuilder().setSigningKey(jwtSecret).build()
                 .parseClaimsJws(token)
                 .getBody();
+
         return claims.getSubject();
     }
 

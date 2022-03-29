@@ -41,6 +41,7 @@ public class AnimeService extends CommonService {
                 .build();
 
         animeRepository.save(a);
+        animeToCreate.setIdAnime(a.getIdAnime());
         return animeToCreate;
     }
 }

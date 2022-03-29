@@ -19,7 +19,8 @@ public class SpringCloudConfig {
     {
         //http.csrf().disable();
         return builder.routes()
-                .route(r -> r.path("/animeservice/**").filters(f-> f.filter(customJwtFilter.apply(new JwtCustomFilter.Config()))).uri("lb://anime-service"))
+                .route(r -> r.path("/animeservice/anime/**").filters(f-> f.filter(customJwtFilter.apply(new JwtCustomFilter.Config()))).uri("lb://anime-service"))
+                .route(r -> r.path("/animeservice/admin/**").filters(f-> f.filter(customJwtFilter.apply(new JwtCustomFilter.Config(true)))).uri("lb://anime-service"))
                 .route(r -> r.path("/episodeservice/**").filters(f-> f.filter(customJwtFilter.apply(new JwtCustomFilter.Config()))).uri("lb://episode-service"))
                 .route(r -> r.path("/personnageservice/**").filters(f-> f.filter(customJwtFilter.apply(new JwtCustomFilter.Config()))).uri("lb://personnage-service"))
                 .route(r -> r.path("/utilisateurservice/utilisateur/**").filters(f-> f.filter(customJwtFilter.apply(new JwtCustomFilter.Config()))).uri("lb://utilisateur-service"))

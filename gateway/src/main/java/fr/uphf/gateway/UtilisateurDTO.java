@@ -1,8 +1,7 @@
-package fr.uphf.utilisateur.dto;
+package fr.uphf.gateway;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
@@ -10,7 +9,9 @@ import java.util.Map;
 @Getter
 @Setter
 @Builder
-public class UtilisateurDTO implements Serializable{
+@NoArgsConstructor
+@AllArgsConstructor
+public class UtilisateurDTO implements Serializable {
     private String username;
     private String mail;
     private String mdp;

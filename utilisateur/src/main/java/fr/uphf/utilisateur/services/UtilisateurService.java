@@ -62,7 +62,6 @@ public class UtilisateurService extends CommonService {
                 .username(utilisateurToCreate.getUsername())
                 .password(utilisateurToCreate.getMdp())
                 .mail(utilisateurToCreate.getMail())
-                .admin(utilisateurToCreate.isAdmin())
                 .build();
 
         utilisateurRepository.save(u);

@@ -1,10 +1,10 @@
 package fr.uphf.gateway;
 
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.SignatureException;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,21 +27,34 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 
 @Component
 public class JwtCustomFilter extends AbstractGatewayFilterFactory<JwtCustomFilter.Config> {
+
     @Value("${app.jwtSecret}")
     private String jwtSecret;
     private static final Logger logger = LoggerFactory.getLogger(JwtCustomFilter.class);
 
+    @Autowired
+    public RestTemplate restTemplate;
+
+    public WebClient webClient = WebClient.create();
 
     @Override
     public GatewayFilter apply(Config config) {
         return ((exchange, chain) -> {
             ServerHttpRequest request = exchange.getRequest();
-
-            if (!request.getHeaders().containsKey(HttpHeaders.AUTHORIZATION) || !(isAuthorize(request.getHeaders().get(HttpHeaders.AUTHORIZATION).get(0)).getStatusCode() == HttpStatus.OK)) {
-                return onError(exchange, "Not Authorized!");
+            System.out.println(config.admin);
+            if(!config.admin) {
+                if (!request.getHeaders().containsKey(HttpHeaders.AUTHORIZATION) || !(isAuthorize(request.getHeaders().get(HttpHeaders.AUTHORIZATION).get(0)).getStatusCode() == HttpStatus.OK)) {
+                    return onError(exchange, "Not Authorized!");
+                }
+            }
+            else {
+                if (!request.getHeaders().containsKey(HttpHeaders.AUTHORIZATION) || !(isAuthorize(request.getHeaders().get(HttpHeaders.AUTHORIZATION).get(0)).getStatusCode() == HttpStatus.OK) || !(getAdminFromJWT(request.getHeaders().get(HttpHeaders.AUTHORIZATION).get(0)))) {
+                   return onError(exchange, "Not Authorized!");
+                }
             }
             return chain.filter(exchange);
         });
@@ -55,6 +68,7 @@ public class JwtCustomFilter extends AbstractGatewayFilterFactory<JwtCustomFilte
         DataBuffer buffer = exchange.getResponse().bufferFactory().wrap(bytes);
         return response.writeWith(Flux.just(buffer));
     }
+
     public ResponseEntity isAuthorize(String jwt) {
         System.out.println("test");
         if(StringUtils.hasText(jwt) && jwt.startsWith("Bearer ")) {
@@ -64,6 +78,22 @@ public class JwtCustomFilter extends AbstractGatewayFilterFactory<JwtCustomFilte
             }
         }
         return new ResponseEntity("Vous n'êtes pas autorisé à appeler la ressource", HttpStatus.UNAUTHORIZED);
+    }
+
+    public String getUserIdFromJWT(String token) {
+        token = token.substring(7);
+        Claims claims = Jwts.parserBuilder().setSigningKey(jwtSecret).build()
+                .parseClaimsJws(token)
+                .getBody();
+        return claims.getSubject();
+    }
+
+    public Boolean getAdminFromJWT(String token) {
+        token = token.substring(7);
+        Claims claims = Jwts.parserBuilder().setSigningKey(jwtSecret).build()
+                .parseClaimsJws(token)
+                .getBody();
+        return claims.get("admin", Boolean.class);
     }
 
     public boolean validateToken(String authToken) {
@@ -83,9 +113,21 @@ public class JwtCustomFilter extends AbstractGatewayFilterFactory<JwtCustomFilte
         }
         return false;
     }
-
+    @Getter
+    @Setter
+    @Builder
     public static class Config {
         //Put the configuration properties for your filter here
+        private boolean admin;
+
+        public Config() {
+            admin = false;
+        }
+
+        public Config(boolean admin)
+        {
+            this.admin = admin;
+        }
     }
 
 }
