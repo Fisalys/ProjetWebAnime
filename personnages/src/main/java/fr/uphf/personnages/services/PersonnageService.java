@@ -44,4 +44,22 @@ public class PersonnageService extends CommonService {
         personnageRepository.save(p);
         return personnageToCreate;
     }
+
+    public PersonnageDTO modifierPersonnage(PersonnageDTO personnageDTO)
+    {
+        Personnage personnage = personnageRepository.getById(personnageDTO.getIdAnime());
+        if(personnageDTO.getNom() != null)
+            personnage.setNom(personnageDTO.getNom());
+        if(personnageDTO.getPrenom() != null)
+            personnage.setPrenom(personnageDTO.getPrenom());
+        if(personnageDTO.getGenre() != null)
+            personnage.setGenre(personnageDTO.getGenre());
+        if(personnage.getIdAnime() != null)
+            personnage.setIdAnime(personnageDTO.getIdAnime());
+        if(personnage.getVoice() != null)
+            personnage.setVoice(personnageDTO.getVoice());
+
+        personnageRepository.save(personnage);
+        return personnageDTO;
+    }
 }

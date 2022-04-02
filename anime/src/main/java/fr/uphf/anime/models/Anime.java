@@ -22,9 +22,5 @@ public class Anime {
     @ElementCollection
     private List<Integer> listEp;
     @ElementCollection
-    private List<String> listNomEp;
-    @ElementCollection
     private List<Integer> listPers;
-    @ElementCollection
-    private List<String> listNomPers;
 }

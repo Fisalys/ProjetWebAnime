@@ -4,10 +4,7 @@ import fr.uphf.anime.dto.AnimeDTO;
 import fr.uphf.anime.exeptions.ProcessExeption;
 import fr.uphf.anime.services.AnimeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("admin")
@@ -19,5 +16,11 @@ public class AdminRessource {
     public AnimeDTO createAnime(@RequestBody AnimeDTO animeDTO) throws ProcessExeption {
         animeService.validateAnimeModel(animeDTO);
         return animeService.saveAnime(animeDTO);
+    }
+
+    @PutMapping
+    AnimeDTO modifierAnime(@RequestBody AnimeDTO animeDTO)
+    {
+        return animeService.modifierAnime(animeDTO);
     }
 }

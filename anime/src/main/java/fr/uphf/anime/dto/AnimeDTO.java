@@ -18,7 +18,5 @@ public class AnimeDTO implements Serializable {
     private String description;
     private int nbEp;
     private List<Integer> listEp;
-    private List<String> listNomEp;
     private List<Integer> listPers;
-    private List<String> listNomPers;
 }
