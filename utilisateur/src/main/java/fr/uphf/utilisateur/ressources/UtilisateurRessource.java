@@ -37,4 +37,8 @@ public class UtilisateurRessource extends CommonService {
         return utilisateurService.getUtilisateurByUsername(username);
     }
 
+    @DeleteMapping
+    public void deleteUtilisateur(@RequestBody UtilisateurDTO utilisateurDTO) throws ProcessExeption {
+        utilisateurService.deleteUtilisateur(utilisateurDTO);
+    }
 }

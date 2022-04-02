@@ -116,4 +116,12 @@ public class UtilisateurService extends CommonService {
         utilisateurRepository.save(utilisateur);
         return utilisateurDTO;
     }
+
+    public void deleteUtilisateur(UtilisateurDTO utilisateurDTO) throws ProcessExeption {
+        Utilisateur u = utilisateurRepository.findUtilisateurByUsername(utilisateurDTO.getUsername());
+        if(u==null)
+            throw new ProcessExeption(String.format(UTILISATEUR_NOT_FOUND,u.getUsername()));
+
+        utilisateurRepository.delete(u);
+    }
 }
