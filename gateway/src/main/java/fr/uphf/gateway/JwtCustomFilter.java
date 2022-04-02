@@ -47,12 +47,15 @@ public class JwtCustomFilter extends AbstractGatewayFilterFactory<JwtCustomFilte
             ServerHttpRequest request = exchange.getRequest();
             System.out.println(config.admin);
             if(!config.admin) {
-                if (!request.getHeaders().containsKey(HttpHeaders.AUTHORIZATION) || !(isAuthorize(request.getHeaders().get(HttpHeaders.AUTHORIZATION).get(0)).getStatusCode() == HttpStatus.OK)) {
+                if (!request.getHeaders().containsKey(HttpHeaders.AUTHORIZATION) ||
+                        !(isAuthorize(request.getHeaders().get(HttpHeaders.AUTHORIZATION).get(0)).getStatusCode() == HttpStatus.OK)) {
                     return onError(exchange, "Not Authorized!");
                 }
             }
             else {
-                if (!request.getHeaders().containsKey(HttpHeaders.AUTHORIZATION) || !(isAuthorize(request.getHeaders().get(HttpHeaders.AUTHORIZATION).get(0)).getStatusCode() == HttpStatus.OK) || !(getAdminFromJWT(request.getHeaders().get(HttpHeaders.AUTHORIZATION).get(0)))) {
+                if (!request.getHeaders().containsKey(HttpHeaders.AUTHORIZATION) ||
+                        !(isAuthorize(request.getHeaders().get(HttpHeaders.AUTHORIZATION).get(0)).getStatusCode() == HttpStatus.OK) ||
+                        !(getAdminFromJWT(request.getHeaders().get(HttpHeaders.AUTHORIZATION).get(0)))) {
                    return onError(exchange, "Not Authorized!");
                 }
             }

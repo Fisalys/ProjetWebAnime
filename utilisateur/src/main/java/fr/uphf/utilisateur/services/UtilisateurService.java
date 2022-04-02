@@ -85,15 +85,19 @@ public class UtilisateurService extends CommonService {
         return dto;
     }
 
-    public void deleteUtilisateur(String username)
-    {
+    public void deleteUtilisateur(String username) throws ProcessExeption {
+        if(username.equals("admin"))
+            throw new ProcessExeption("On ne peut pas supprimer l'administrateur");
         Utilisateur u = utilisateurRepository.findUtilisateurByUsername(username);
+        if(u == null)
+            throw new ProcessExeption(String.format(UTILISATEUR_NOT_FOUND,username));
         utilisateurRepository.delete(u);
     }
 
-    public UtilisateurDTO modifierUtilisateur(UtilisateurDTO utilisateurDTO)
-    {
+    public UtilisateurDTO modifierUtilisateur(UtilisateurDTO utilisateurDTO) throws ProcessExeption {
         Utilisateur utilisateur = utilisateurRepository.findUtilisateurByUsername(utilisateurDTO.getUsername());
+        if(utilisateur == null)
+            throw new ProcessExeption(String.format(UTILISATEUR_NOT_FOUND,utilisateurDTO.getUsername()));
         if(utilisateurDTO.getMdp() != null)
             utilisateur.setPassword(utilisateurDTO.getMdp());
         if(utilisateurDTO.getMail() != null)
@@ -107,14 +111,21 @@ public class UtilisateurService extends CommonService {
         return utilisateurDTO;
     }
 
-    public UtilisateurDTO modifierUtilisateurListe(UtilisateurDTO utilisateurDTO)
-    {
-        Utilisateur utilisateur = utilisateurRepository.findUtilisateurByUsername(utilisateurDTO.getUsername());
-        if(utilisateur.getListeAnime() != null)
-            utilisateur.setListeAnime(utilisateurDTO.getListeAnime());
+    public UtilisateurDTO modifierUtilisateurListe(String username, List<Integer> listAnime) throws ProcessExeption {
+        Utilisateur utilisateur = utilisateurRepository.findUtilisateurByUsername(username);
+        if(utilisateur == null)
+            throw new ProcessExeption(String.format(UTILISATEUR_NOT_FOUND,username));
 
-        utilisateurRepository.save(utilisateur);
-        return utilisateurDTO;
+        utilisateur.setListeAnime(listAnime);
+
+        Utilisateur u = utilisateurRepository.save(utilisateur);
+        return UtilisateurDTO.builder()
+                .username(u.getUsername())
+                .mdp(u.getPassword())
+                .admin(u.isAdmin())
+                .listeAnime(u.getListeAnime())
+                .mail(u.getMail())
+                .build();
     }
 
     public void deleteUtilisateur(UtilisateurDTO utilisateurDTO) throws ProcessExeption {

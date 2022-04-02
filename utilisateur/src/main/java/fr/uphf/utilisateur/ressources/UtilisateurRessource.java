@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("utilisateur")
 public class UtilisateurRessource extends CommonService {
@@ -31,14 +33,32 @@ public class UtilisateurRessource extends CommonService {
         return utilisateurService.saveUtilisateur(utilisateurDTO);
     }
 
-    @GetMapping("users")
+    @GetMapping("user")
     public UtilisateurDTO getUtilisateurByUsername(@RequestParam String username) throws ProcessExeption
     {
         return utilisateurService.getUtilisateurByUsername(username);
     }
 
-    @DeleteMapping
-    public void deleteUtilisateur(@RequestBody UtilisateurDTO utilisateurDTO) throws ProcessExeption {
-        utilisateurService.deleteUtilisateur(utilisateurDTO);
+    @GetMapping("users")
+    public List<UtilisateurDTO> getAllUsers(){
+        return utilisateurService.getAllUtilisateur();
     }
+
+    @DeleteMapping("delete")
+    public ResponseEntity deleteUtilisateur(@RequestParam String username) throws ProcessExeption {
+        utilisateurService.deleteUtilisateur(username);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("modify")
+    public UtilisateurDTO modifyUtilisateur(@RequestBody UtilisateurDTO utilisateurToModify) throws ProcessExeption {
+        return  utilisateurService.modifierUtilisateur(utilisateurToModify);
+    }
+
+    @PutMapping("addAnime")
+    public UtilisateurDTO modifyList(@RequestParam String username, @RequestParam List<Integer> listAnime) throws ProcessExeption {
+        return utilisateurService.modifierUtilisateurListe(username, listAnime);
+    }
+
+
 }
