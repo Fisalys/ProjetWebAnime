@@ -1,6 +1,8 @@
 package fr.uphf.anime.models;
 
 import lombok.*;
+import org.hibernate.annotations.LazyToOne;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.List;
@@ -17,6 +19,7 @@ public class Anime {
     private Integer idAnime;
     private String nom;
     private String genre;
+    @Lob
     private String description;
     private int nbEp;
     @ElementCollection

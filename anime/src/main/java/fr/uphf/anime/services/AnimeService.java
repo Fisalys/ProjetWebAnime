@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AnimeService extends CommonService {
@@ -86,5 +87,74 @@ public class AnimeService extends CommonService {
             dto.add(d);
         }
         return dto;
+    }
+
+    public AnimeDTO getAnime(Integer id) throws ProcessExeption {
+        Anime a = animeRepository.findById(id).orElseThrow(()-> new ProcessExeption(String.format(ANIME_NOT_FOUND, id)));
+        return AnimeDTO.builder()
+                .idAnime(a.getIdAnime())
+                .nom(a.getNom())
+                .genre(a.getGenre())
+                .description(a.getDescription())
+                .nbEp(a.getNbEp())
+                .listEp(a.getListEp())
+                .listPers(a.getListPers())
+                .build();
+    }
+
+    public List<AnimeDTO> getAnimesById(List<Integer> listId) throws ProcessExeption {
+        List<Anime> list =  new ArrayList<>();
+        for(Integer i:listId)
+        {
+            list.add(animeRepository.findById(i).orElseThrow(()->new ProcessExeption(String.format(ANIME_NOT_FOUND, i))));
+        }
+        List<AnimeDTO> dto = new ArrayList<>();
+        for(Anime a :list){
+            AnimeDTO d = AnimeDTO.builder()
+                    .idAnime(a.getIdAnime())
+                    .nom(a.getNom())
+                    .genre(a.getGenre())
+                    .description(a.getDescription())
+                    .nbEp(a.getNbEp())
+                    .listEp(a.getListEp())
+                    .listPers(a.getListPers())
+                    .build();
+            dto.add(d);
+        }
+        return dto;
+    }
+
+    public AnimeDTO ajouterEpisode(Integer idAnime,Integer idEpisode) throws ProcessExeption {
+        Anime a = animeRepository.findById(idAnime).orElseThrow(()-> new ProcessExeption(String.format(ANIME_NOT_FOUND, idAnime)));
+
+        a.getListEp().add(idEpisode);
+        a.setNbEp(a.getNbEp()+1);
+        animeRepository.save(a);
+
+        return AnimeDTO.builder()
+                .idAnime(a.getIdAnime())
+                .nom(a.getNom())
+                .genre(a.getGenre())
+                .description(a.getDescription())
+                .nbEp(a.getNbEp())
+                .listEp(a.getListEp())
+                .listPers(a.getListPers())
+                .build();
+    }
+    public AnimeDTO ajouterPersonnage(Integer idAnime,Integer idPersonnage) throws ProcessExeption {
+        Anime a = animeRepository.findById(idAnime).orElseThrow(()-> new ProcessExeption(String.format(ANIME_NOT_FOUND, idAnime)));
+
+        a.getListPers().add(idPersonnage);
+        animeRepository.save(a);
+
+        return AnimeDTO.builder()
+                .idAnime(a.getIdAnime())
+                .nom(a.getNom())
+                .genre(a.getGenre())
+                .description(a.getDescription())
+                .nbEp(a.getNbEp())
+                .listEp(a.getListEp())
+                .listPers(a.getListPers())
+                .build();
     }
 }

@@ -23,4 +23,14 @@ public class AdminRessource {
     {
         return animeService.modifierAnime(animeDTO);
     }
+
+    @PutMapping("addEpisode")
+    AnimeDTO addEpisode(@RequestParam Integer idAnime, @RequestParam  Integer idEpisode) throws ProcessExeption {
+        return animeService.ajouterEpisode(idAnime, idEpisode);
+    }
+
+    @PutMapping("addPersonnage")
+    AnimeDTO addPersonnage(@RequestParam Integer idAnime, @RequestParam  Integer idPersonnage) throws ProcessExeption {
+        return animeService.ajouterPersonnage(idAnime, idPersonnage);
+    }
 }

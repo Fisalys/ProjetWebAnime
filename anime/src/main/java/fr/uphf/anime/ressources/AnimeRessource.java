@@ -7,6 +7,7 @@ import fr.uphf.anime.services.CommonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.ws.rs.PathParam;
 import java.util.List;
 
 @RestController
@@ -17,5 +18,16 @@ public class AnimeRessource extends CommonService {
 
     @GetMapping("animes")
     public List<AnimeDTO> getAllAnime(){ return this.animeService.getAllAnime(); }
+
+    @GetMapping("animes/{id}")
+    public AnimeDTO getAnimeById(@PathVariable("id") Integer id) throws ProcessExeption {
+        return this.animeService.getAnime(id);
+    }
+
+    @GetMapping("animes/list")
+    public List<AnimeDTO> getListAnime(@RequestParam List<Integer> listId) throws ProcessExeption {
+        return this.animeService.getAnimesById(listId);
+    }
+
 
 }
