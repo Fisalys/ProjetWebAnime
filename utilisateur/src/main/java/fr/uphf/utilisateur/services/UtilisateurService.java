@@ -94,16 +94,14 @@ public class UtilisateurService extends CommonService {
         utilisateurRepository.delete(u);
     }
 
-    public UtilisateurDTO modifierUtilisateur(UtilisateurDTO utilisateurDTO) throws ProcessExeption {
-        Utilisateur utilisateur = utilisateurRepository.findUtilisateurByUsername(utilisateurDTO.getUsername());
+    public UtilisateurDTO modifierUtilisateur(String username,UtilisateurDTO utilisateurDTO) throws ProcessExeption {
+        Utilisateur utilisateur = utilisateurRepository.findUtilisateurByUsername(username);
         if(utilisateur == null)
-            throw new ProcessExeption(String.format(UTILISATEUR_NOT_FOUND,utilisateurDTO.getUsername()));
+            throw new ProcessExeption(String.format(UTILISATEUR_NOT_FOUND,username));
         if(utilisateurDTO.getMdp() != null)
             utilisateur.setPassword(utilisateurDTO.getMdp());
         if(utilisateurDTO.getMail() != null)
             utilisateur.setMail(utilisateurDTO.getMail());
-        if(utilisateurDTO.getListeAnime() != null)
-            utilisateur.setListeAnime(utilisateurDTO.getListeAnime());
         if(utilisateurDTO.getNotification() != null)
             utilisateur.setNotification(utilisateurDTO.getNotification());
 
@@ -121,18 +119,17 @@ public class UtilisateurService extends CommonService {
         Utilisateur u = utilisateurRepository.save(utilisateur);
         return UtilisateurDTO.builder()
                 .username(u.getUsername())
-                .mdp(u.getPassword())
                 .admin(u.isAdmin())
                 .listeAnime(u.getListeAnime())
                 .mail(u.getMail())
                 .build();
     }
 
-    public void deleteUtilisateur(UtilisateurDTO utilisateurDTO) throws ProcessExeption {
-        Utilisateur u = utilisateurRepository.findUtilisateurByUsername(utilisateurDTO.getUsername());
+    public boolean isUserAnAdmin(String username) throws ProcessExeption {
+        Utilisateur u = utilisateurRepository.findUtilisateurByUsername(username);
         if(u==null)
-            throw new ProcessExeption(String.format(UTILISATEUR_NOT_FOUND,u.getUsername()));
+            throw new ProcessExeption(String.format(UTILISATEUR_NOT_FOUND,username));
 
-        utilisateurRepository.delete(u);
+        return u.isAdmin();
     }
 }

@@ -18,12 +18,6 @@ public class UtilisateurRessource extends CommonService {
     @Autowired
     UtilisateurService utilisateurService;
 
-    /*
-    @Autowired
-    private JwtTokenProvider jwtTokenProvider;
-
-     */
-
     @Autowired
     private RestTemplate restTemplate;
 
@@ -51,13 +45,18 @@ public class UtilisateurRessource extends CommonService {
     }
 
     @PutMapping("modify")
-    public UtilisateurDTO modifyUtilisateur(@RequestBody UtilisateurDTO utilisateurToModify) throws ProcessExeption {
-        return  utilisateurService.modifierUtilisateur(utilisateurToModify);
+    public UtilisateurDTO modifyUtilisateur(@RequestParam String username, @RequestBody UtilisateurDTO utilisateurToModify) throws ProcessExeption {
+        return  utilisateurService.modifierUtilisateur(username,utilisateurToModify);
     }
 
     @PutMapping("addAnime")
-    public UtilisateurDTO modifyList(@RequestParam String username, @RequestParam List<Integer> listAnime) throws ProcessExeption {
+    public UtilisateurDTO modifyList(@RequestParam String username, @RequestBody List<Integer> listAnime) throws ProcessExeption {
         return utilisateurService.modifierUtilisateurListe(username, listAnime);
+    }
+
+    @GetMapping("isAdmin")
+    public boolean isUserAnAdmin(@RequestParam String username) throws ProcessExeption {
+        return utilisateurService.isUserAnAdmin(username);
     }
 
 
