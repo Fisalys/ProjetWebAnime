@@ -11,3 +11,5 @@ episode,
 personnage.
 
 # Structure du projet :
+
+![alt text]https://github.com/Fisalys/ProjetWebAnime/blob/main/Sans%20titre.png
