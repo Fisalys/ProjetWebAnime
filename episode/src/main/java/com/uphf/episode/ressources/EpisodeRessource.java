@@ -17,4 +17,14 @@ public class EpisodeRessource extends CommonService {
 
     @GetMapping("episodes")
     public List<EpisodeDTO> getAllEpisode(){ return this.episodeService.getAllEpisode(); }
+
+    @GetMapping("episodes/{id}")
+    public EpisodeDTO getEpisodeById(@PathVariable("id") Integer idEpisode) throws ProcessExeption {
+       return episodeService.getEpisodeById(idEpisode);
+    }
+
+    @GetMapping("episode")
+    public List<EpisodeDTO> getEpisodeByIdAnime(@RequestParam("idAnime") Integer idAnime) throws ProcessExeption {
+        return episodeService.getEpisodeByIdAnime(idAnime);
+    }
 }
