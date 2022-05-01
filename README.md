@@ -1,5 +1,5 @@
 # ProjetWebAnime
-Projet M1 TNSID de Gestion d'une liste des animés vus 
+Projet M1 TNSID de Gestion d'une liste des animés vus par STILLATUS Julien et KWIATEK Guyliane
 
 Ordre de démarrage des micro-services :
 ServeurDiscovery,
